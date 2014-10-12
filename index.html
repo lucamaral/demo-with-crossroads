@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Demo using crossroads.js</title>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li>
+                <button onclick="navigate(1);">Simple route</button>
+            </li>
+            <li>
+                <button onclick="navigate(2);">Another route</button>
+            </li>
+            <li>
+                <button onclick="navigate('lucas');">Invalid route</button>
+            </li>
+        </ul>
+    </nav>
+    <section>
+        <header>
+            <h3> Dynamic content </h3>
+        </header>
+        <article id="main-content"></article>
+    </section>
+
+    <script src="bower_components/crossroads/dev/lib/signals.js"></script>
+    <script src="bower_components/crossroads/dist/crossroads.min.js"></script>
+    <script>
+        // creating route;
+        var userRoute = crossroads.addRoute('/users/{id}');
+
+         // creating first handler
+        userRoute.matched.add(function (id) {
+            console.info("First handler - user id : " + id);
+        });
+
+         // creating second handler
+        userRoute.matched.add(function (id) {
+            console.info("Second handler - user id : " + id);
+        });
+
+         // adding some rules
+        userRoute.rules = {
+            id: function (val, request, values) {
+                return !isNaN(val);
+            }
+        };
+
+         // navigation function
+        function navigate(id) {
+            crossroads.parse('/users/' + id);
+        }
+    </script>
+</body>
+
+</html>
